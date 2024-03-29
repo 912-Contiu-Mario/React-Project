@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid'
 import { on } from 'events';
 
 
-const AddTank = ({ tankList, handleAddTank }) => {
+const AddTank = ({handleAddTank }) => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [country, setCountry] = useState('');
@@ -31,13 +31,12 @@ const AddTank = ({ tankList, handleAddTank }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const id = uuid();
+        // const id = uuid();
         const hasError = Object.values(fields).some(field => field.error);
 
         if(!hasError){
-            const toSendFirepower = firepower + ' HP/min';
-            const toSendSpeed = speed + ' km/h';
-            handleAddTank({ id, name, country, type, year, toSendFirepower, toSendFirepower });
+            
+            handleAddTank({ tankName: name, tankCountry: country, tankType: type, tankYear: year, tankFirepower: firepower, tankSpeed: speed});
             navigate(`/tanks`);
         }
         else{
@@ -151,15 +150,16 @@ const AddTank = ({ tankList, handleAddTank }) => {
 
                         <FormControl fullWidth variant="filled">Country
                             <Select
+                                id= "countrySelector"
                                 value={country}
                                 label="Country"
                                 onChange={(e) => setCountry(e.target.value)}>
-                                    <MenuItem value="USA">USA</MenuItem>
-                                    <MenuItem value="Russia">Russia</MenuItem>
-                                    <MenuItem value="Germany">Germany</MenuItem>
-                                    <MenuItem value="UK">UK</MenuItem>
-                                    <MenuItem value="France">France</MenuItem>
-                                    <MenuItem value="Japan">Japan</MenuItem>
+                                    <MenuItem label="USA" value="USA">USA</MenuItem>
+                                    <MenuItem label="Russia" value="Russia">Russia</MenuItem>
+                                    <MenuItem label="Germany"  value="Germany">Germany</MenuItem>
+                                    <MenuItem label="UK" value="UK">UK</MenuItem>
+                                    <MenuItem label="France"  value="France">France</MenuItem>
+                                    <MenuItem label="Japan" value="Japan">Japan</MenuItem>
                                 </Select>
                         </FormControl>
 
@@ -167,6 +167,7 @@ const AddTank = ({ tankList, handleAddTank }) => {
                     <Grid item xs={12}>
                     <FormControl fullWidth variant="filled">Type
                             <Select
+                                id= "typeSelector"
                                 value={type}
                                 label="Type"
                                 onChange={(e) => setType(e.target.value)}>
@@ -236,7 +237,7 @@ const AddTank = ({ tankList, handleAddTank }) => {
                         />
                     </Grid>
                     <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-                        <Button data-testid='submit-button' type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
+                        <Button data-testid='submitButton' type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
                             Add Tank
                         </Button>
                         <Link to="/tanks" style={{ textDecoration: 'none' }}>

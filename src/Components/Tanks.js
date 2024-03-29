@@ -16,19 +16,11 @@ const pieSizing = {
 const Tanks = ({ tankList, deleteTankHandler }) => {
 
     const [pieChartData, setPiechartData] = useState([]);
-    console.log("tanks mounted");
+    // console.log("tanks mounted");
 
     
-
-
-      
-
-
     const displayChartDataHandler =(data)=>{
-
-
         setPiechartData(data);
-
     };
 
 
@@ -45,9 +37,21 @@ const Tanks = ({ tankList, deleteTankHandler }) => {
 
     return (
         <div style={{ textAlign:    'center', margin: '20px' }}>
+            <div>
+            <h1 style={{
+                fontFamily: '"Roboto Condensed", sans-serif',
+                color: '#f2f2f2',
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                padding: '20px',
+                borderRadius: '5px'
+            
+            }}>Tanks Wiki</h1>
             <TankList displayChartDataHandler={displayChartDataHandler} tankList={tankList} deleteTankHandler={deleteTankHandler} />
             <Link to="/tanks/add" style={{ textDecoration: 'none' }}>
                 <button data-testid="addTankButton" style={{
+                    margin: '20px',
                     padding: '10px 20px',
                     background: 'linear-gradient(180deg, #4e4e4e, #333)',
                     border: 'none',
@@ -58,14 +62,20 @@ const Tanks = ({ tankList, deleteTankHandler }) => {
                     fontFamily: '"Roboto Condensed", sans-serif',
                     cursor: 'pointer',
                     outline: 'none',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
                 }}>Add New Tank</button>
             </Link>
-            <MyPieChart pieChartData={pieChartData} sizing={pieSizing} />
+            </div>
+            <div>
+
+                <center><h2 sty>Country distribution</h2>
+                <MyPieChart pieChartData={pieChartData} sizing={pieSizing} />
+                </center>
+            </div>
                 <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
                     <h2>Slowest Tank</h2>
                     {/* <p>{findSlowestTank().name} is the slowest tank with a speed of {findSlowestTank().speed}</p> */}
                 </Box>
+
         </div>
     );
 }

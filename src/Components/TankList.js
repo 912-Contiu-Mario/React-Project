@@ -5,6 +5,20 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import Button from '@mui/material/Button';
 
 
+
+
+
+
+
+
+const countryFlag = {
+    Germany: '/germany.png',
+    USA: '/united-states.png',
+    UK: '/united-kingdom.png',
+    Russia: '/russia.png',
+    Japan: '/japan.png',
+    France: '/france.png',
+};
 const randColor = () =>  {
     return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
 }
@@ -13,7 +27,7 @@ let clickedTank = 0;
 const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
     
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(7);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
 
     const history = useNavigate();
@@ -30,7 +44,7 @@ const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
 
     useEffect(()=>{
         const data = tankList.reduce((acc, item) => {
-            acc[item.country] = (acc[item.country] || 0) + 1;
+            acc[item.tankCountry] = (acc[item.tankCountry] || 0) + 1;
             return acc;
           }, {});
           let pieChartDataAux = [];
@@ -92,22 +106,109 @@ const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', background: '#1a1a1a', color: '#f2f2f2' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
+                
                 <Table stickyHeader>
-                    <TableHead>
+                    <TableHead sx={{
+                        height:"50px",
+                        
+
+                }}>
+                       
                         <TableRow>
-                            <TableCell style={{ color: '#f2f2f2', fontWeight: 'bold', background: '#373737', borderTop: '3px solid #555' }}>Tank Name</TableCell>
-                            <TableCell style={{ color: '#f2f2f2', fontWeight: 'bold', background: '#373737' }}>Country</TableCell>
-                            <TableCell style={{ color: '#f2f2f2', fontWeight: 'bold', background: '#373737' }}>Type</TableCell>
-                            <TableCell style={{ color: '#f2f2f2', fontWeight: 'bold', background: '#373737' }}>Actions</TableCell>
+                            <TableCell align="center" sx={
+                                {
+                                    
+                                    borderRight: '1px solid #43423c',
+                                    align: 'center',
+                                    fontWeight: 'bold', 
+                                    background: '#302f2d',
+                                    color:'#8c8c7c',
+                                    fontSize: '12px',
+
+                                    
+                                }
+                            }>VEHICLE NAME</TableCell>
+                            <TableCell align="center" sx={
+                                {
+                                    borderRight: '1px solid #43423c',
+                                    align: 'center',
+                                    fontWeight: 'bold', 
+                                    background: '#302f2d',
+                                    color:'#8c8c7c',
+                                    fontSize: '12px',
+                                    
+                                }
+                            }>COUNTRY</TableCell>
+                            <TableCell align="center" sx={
+                                {
+                                    borderRight: '1px solid #43423c',
+                                    align: 'center',
+                                    fontWeight: 'bold', 
+                                    background: '#302f2d',
+                                    color:'#8c8c7c',
+                                    fontSize: '12px',
+                                    
+                                }
+                            }>TYPE</TableCell>
+                            <TableCell align="center" sx={
+                                {
+                                    borderRight: '1px solid #43423c',
+                                        
+                                    fontWeight: 'bold', 
+                                    background: '#302f2d',
+                                    color:'#8c8c7c',
+                                    fontSize: '12px',
+                                    
+                                }
+                            }>ACTIONS</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {getCurrentPageElems(page).map((row) => (
-                            <TableRow key={row.name} onClick={() => handleRowClick(row.id)} style={{ cursor: 'pointer', borderBottom: '1px solid #555', background: '#2a2a2a' }}>
-                                <TableCell style={{ color: '#ddd' }}>{row.name}</TableCell>
-                                <TableCell style={{ color: '#ddd' }}>{row.country}</TableCell>
-                                <TableCell style={{ color: '#ddd' }}>{row.type}</TableCell>
-                                <TableCell style={{ color: '#ddd' }}>
+                            <TableRow
+                                key={row.id}
+                                onClick={() => handleRowClick(row.id)}
+                                sx={{
+                                    height: "59px",
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        '.MuiTableCell-root': {
+                                        backgroundColor: 'rgba(100, 100, 100, 0.2) !important', // Example hover color
+                                        },
+                                    },}}>
+                                <TableCell  
+                                sx={{
+                                    padding: '0px',
+                                     backgroundColor: '#1c1c1e',
+                                    borderBottom: '1px solid #43423c',
+                                    color: '#b8b8a2'
+                                }}
+                                align="center" >{row.tankName}</TableCell>
+                                <TableCell 
+                                    sx={{
+                                        padding: '0px',
+                                        backgroundColor: '#1c1c1e',
+                                        borderBottom: '1px solid #43423c',
+                                        color: '#b8b8a2'
+                                    }}
+                                    align="center">
+                                        <img style={{height:27, width:27}}src={require('./Resources'+countryFlag[row.tankCountry])} /></TableCell>
+                                <TableCell 
+                                sx={{
+                                    padding: '0px',
+                                     backgroundColor: '#1c1c1e',
+                                    borderBottom: '1px solid #43423c',
+                                    color: '#b8b8a2' 
+                                }}
+                                align="center">{row.tankType}</TableCell>
+                                <TableCell
+                                 sx={{
+                                    padding: '0px',
+                                    backgroundColor: '#1c1c1e',
+                                    color: '#b8b8a2',
+                                    borderBottom: '1px solid #43423c',
+                                }}
+                                align="center">
                                     <Button data-testid = "updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>
                                     <Button data-testid = "deleteButton"onClick={(event) => handleClickOpen(row, event)}>Delete</Button>
                                 </TableCell>
@@ -117,7 +218,11 @@ const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
                 </Table>
             </TableContainer>
             <TablePagination
-                style={{ background: '#333', color: 'white' }}
+                style={{ 
+                    fontWeight: 'bold', 
+                    background: '#302f2d',
+                    color:'#8c8c7c',
+                    fontSize: '12px', }}
                 rowsPerPageOptions={[5, 10, 25, 100]}
                 component="div"
                 count={tankList.length}
@@ -143,7 +248,7 @@ const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
             <Button onClick={handleClose} color="primary">
                 Cancel
             </Button>
-            <Button data-testid="submit" onClick={handleDelete} color="secondary" autoFocus>
+            <Button id="comfirmDelete" onClick={handleDelete} color="secondary" autoFocus>
                 Confirm
             </Button>
             </DialogActions>

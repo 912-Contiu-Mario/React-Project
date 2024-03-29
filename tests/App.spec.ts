@@ -1,6 +1,5 @@
-import { test, expect } from '@playwright/test';import App from '../App';
+import { test, expect } from '@playwright/test';import App from '../src/App';
 import React from 'react';
-import Tanks from '../Components/Tanks';
 
 test.use({ viewport: { width: 500, height: 500 } });
 
@@ -11,7 +10,6 @@ test('test for home component', async ({ page }) => {
   expect(name).toBe('Tanks wiki');
   const button = await page.getByTestId('continueButton');
   await button.click();
-
 });
 
 
@@ -38,30 +36,32 @@ test('addTest', async ({ page }) => {
 
   await page.goto('http://localhost:3000/tanks/add');
   await page.getByLabel('Tank Name').fill('Abrahams');
-  await page.getByLabel('Country').fill('USA');
-  await page.getByLabel('Type').fill('Heavy');
-  await page.getByLabel('Year').fill('2021');
-  await page.getByLabel('Firepower').fill('100');
-  await page.getByLabel('Speed').fill('100');
-  await page.click('[data-testid="submit-button"]');
 
-;
+  
+  await page.click('#countrySelector');
+  await page.click('text=USA');
+
+  await page.click('#typeSelector');
+  await page.click('text=Heavy Tank');
+
+
+  await page.getByLabel('Year').fill('1960');
+  await page.getByLabel('Firepower').fill('100');
+  await page.getByLabel('Speed').fill('50');
+  await page.click('[data-testid="submitButton"]');
+
   const pageText = await page.innerText('body');
   expect(pageText).toContain('Abrahams');
   expect(pageText).toContain('USA');
   expect(pageText).toContain('Heavy');
-
-
-
-
 });
 
 
 test('updateTest', async ({ page }) => {
   await page.goto('http://localhost:3000/tanks');
-  await page.click('[data-testid="upateButton"]');
+  await page.click('[data-testid="updateButton"]');
   await page.getByLabel('Tank Name').fill('Abrahams2');
-  await page.click('[data-testid="updateTank"]');
+  await page.click('#updateButton');
   const pageText = await page.innerText('body');
   expect(pageText).toContain('Abrahams2');
 });
@@ -71,21 +71,24 @@ test('deleteTest', async ({ page }) => {
 
   await page.goto('http://localhost:3000/tanks/add');
   await page.getByLabel('Tank Name').fill('Abrahams');
-  await page.getByLabel('Country').fill('USA');
-  await page.getByLabel('Type').fill('Heavy');
-  await page.getByLabel('Year').fill('2021');
-  await page.getByLabel('Firepower').fill('100');
-  await page.getByLabel('Speed').fill('100');
-  await page.click('[data-testid="submit-button"]');
+  await page.click('#countrySelector');
+  await page.click('text=USA');
 
-;
+  await page.click('#typeSelector');
+  await page.click('text=Heavy Tank');
+
+  await page.getByLabel('Year').fill('1990');
+  await page.getByLabel('Firepower').fill('100');
+  await page.getByLabel('Speed').fill('50');
+  await page.click('[data-testid="submitButton"]');
+
   const pageText = await page.innerText('body');
   expect(pageText).toContain('Abrahams');
   expect(pageText).toContain('USA');
   expect(pageText).toContain('Heavy');
 
   await page.click('[data-testid="deleteButton"]');
-  await page.click('[data-testid="comfirm"]');
+  await page.click('#comfirmDelete');
   const text = await page.innerText('body');
   expect(text).not.toContain('Abrahams');
 });

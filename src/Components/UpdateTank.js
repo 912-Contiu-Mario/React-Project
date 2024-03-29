@@ -3,17 +3,22 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@mui/material';
 
 const UpdateTank = ({ tankList, updateTankHandler }) => {
+
+
     const params = useParams();
     const navigate = useNavigate();
     const clickedTankId = params.id;
-    const tank = tankList.find(tank => tank.id === clickedTankId);
 
-    const [name, setName] = useState(tank.name);
-    const [country, setCountry] = useState(tank.country);
-    const [type, setType] = useState(tank.type);
-    const [year, setYear] = useState(tank.year);
-    const [firepower, setFirepower] = useState(tank.firepower);
-    const [speed, setSpeed] = useState(tank.speed);
+    const tank = tankList.find(tank => tank.id == clickedTankId);
+    
+  
+
+    const [name, setName] = useState(tank.tankName);
+    const [country, setCountry] = useState(tank.tankCountry);
+    const [type, setType] = useState(tank.tankType);
+    const [year, setYear] = useState(tank.tankYear);
+    const [firepower, setFirepower] = useState(tank.tankFirepower);
+    const [speed, setSpeed] = useState(tank.tankSpeed);
 
     const [fields, setFields] = useState({
         name: {  error: false, errorMessage: '' },
@@ -106,7 +111,7 @@ const UpdateTank = ({ tankList, updateTankHandler }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const updatedTank = { id: tank.id, name, country, type, year, firepower, speed };
+        const updatedTank = { id: tank.id, tankName: name, tankCountry: country, tankType: type, tankYear: year, tankFirepower: firepower, tankSpeed: speed };
         const hasErrors = Object.values(fields).some(field => field.error);
         if (hasErrors) {
             return;
@@ -225,7 +230,7 @@ const UpdateTank = ({ tankList, updateTankHandler }) => {
                         />
                     </Grid>
                     <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-                        <Button date-testid='updateTank' type="submit" variant="contained" color="primary">
+                        <Button id='updateButton' type="submit" variant="contained" color="primary">
                             Update Tank
                         </Button>
                         <Link to="/tanks" style={{ textDecoration: 'none' }}>

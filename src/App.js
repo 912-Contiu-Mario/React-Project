@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import AddTank from './Components/AddTank.js';
 import { v4 as uuid } from 'uuid'
 
+import TankService from './Service/TankService.js';
+
 
 
 
@@ -33,47 +35,71 @@ const tanksDataList = [
 tanksDataList.sort((tank1, tank2)=>(tank1.name > tank2.name) ? 1 : (tank1.name < tank2.name) ? -1 : 0);
 function App() {
 
-  const [tanksData, setTanksData] = useState(tanksDataList);
-  const [triggerSort, setTriggerSort] = useState(false);
+  const [tanksData, setTanksData] = useState([]);
+  
 
+ const [isLoaded, setIsLoaded] = useState(false);
 
-
+//write function to fetch data from server
   useEffect(()=>{
-    
-    if(triggerSort)
-    {
-      const sortedData = [...tanksData].sort((tank1, tank2)=>(tank1.name > tank2.name) ? 1 : (tank1.name < tank2.name) ? -1 : 0);
-      setTanksData(sortedData);
-      setTriggerSort(false);
-  }
-  },[triggerSort]);
+    TankService.getTanks().then((data)=>{
+      
+      setTanksData(data);
+      setIsLoaded(true);
+    })
+  },[]);
 
+
+  //write a useEffect to sort the data by name every time its changed
+  useEffect(()=>{
+    tanksData.sort((tank1, tank2)=>(tank1.tankName > tank2.tankName) ? 1 : (tank1.tankName < tank2.tankName) ? -1 : 0);
+  },[tanksData]);
 
   const handleAddTank = (tankToAdd) => {
-    const newTanksData = [...tanksData, tankToAdd];
-    setTanksData(newTanksData);
-    setTriggerSort(true);
-  }
+
+    TankService.addTank(tankToAdd).then(()=>{
+
+      TankService.getTanks().then((data)=>{
+        setTanksData(data);
+      }).catch((error)=>{ console.log(error); })  
+    }).catch((error)=>{ console.log(error); })
+  };
 
     const handleDeleteTank = (tankId) => {
-      const filteredData = tanksData.filter(tank => tank.id!== tankId);
-      setTanksData(filteredData);
-      setTriggerSort(true);
-
-    }
+      TankService.deleteTank(tankId).then(()=>{
+        TankService.getTanks().then((data)=>{
+          setTanksData(data);
+        }).catch((error)=>{ console.log(error); })
+      }).catch((error)=>{
+        console.log(error);
+      });
+    };
   
   const handleUpdateTank = (updatedTank) => {
-    const tankIndex = tanksData.findIndex(tank => tank.id === updatedTank.id);
-    const newTanksData = [
-      ...tanksData.slice(0, tankIndex), // Copy all items before the updated tank
-      updatedTank,                          // Insert the updated tank
-      ...tanksData.slice(tankIndex + 1) // Copy all items after the updated tank
-    ];
 
-    setTanksData(newTanksData);
-    setTriggerSort(true);
-
+    TankService.updateTank(updatedTank).then(()=>{
+      TankService.getTanks().then((data)=>{
+        setTanksData(data);
+      }).catch ((error)=>{ console.log(error); }) 
+    }).catch((error)=>{ console.log(error); })
   };
+
+
+
+  //return another div if data is not loaded, make it look good
+   
+
+
+
+
+  if(!isLoaded){
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    )
+  }
+
   return (
     <div>
       <Router>
