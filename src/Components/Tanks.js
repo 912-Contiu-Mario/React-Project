@@ -16,13 +16,13 @@ const pieSizing = {
 const Tanks = ({ tankList, deleteTankHandler }) => {
 
     const [pieChartData, setPiechartData] = useState([]);
-    // console.log("tanks mounted");
 
+    const [analyticsView, setAnalyticsView] = useState(false);
     
     const displayChartDataHandler =(data)=>{
+        console.log(data);
         setPiechartData(data);
     };
-
 
     const findSlowestTank = () => {
         let slowestTank = tankList[0];
@@ -33,7 +33,6 @@ const Tanks = ({ tankList, deleteTankHandler }) => {
         });
         return slowestTank;
     };
-
 
     return (
         <div style={{ textAlign:    'center', margin: '20px' }}>
@@ -49,8 +48,23 @@ const Tanks = ({ tankList, deleteTankHandler }) => {
             
             }}>Tanks Wiki</h1>
             <TankList displayChartDataHandler={displayChartDataHandler} tankList={tankList} deleteTankHandler={deleteTankHandler} />
-            <Link to="/tanks/add" style={{ textDecoration: 'none' }}>
-                <button data-testid="addTankButton" style={{
+            <div style={{display:"flex", justifyContent: "center"}}>
+                <Link to="/tanks/add" style={{ textDecoration: 'none' }}>
+                    <button data-testid="addTankButton" style={{
+                        margin: '20px',
+                        padding: '10px 20px',
+                        background: 'linear-gradient(180deg, #4e4e4e, #333)',
+                        border: 'none',
+                        borderRadius: '4px',
+                        color: '#f2f2f2',
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                        fontFamily: '"Roboto Condensed", sans-serif',
+                        cursor: 'pointer',
+                        outline: 'none',
+                    }}>Add New Tank</button>
+                </Link>
+                <button data-testid="analyticsButton" onClick={() => setAnalyticsView(!analyticsView)} style={{
                     margin: '20px',
                     padding: '10px 20px',
                     background: 'linear-gradient(180deg, #4e4e4e, #333)',
@@ -62,21 +76,31 @@ const Tanks = ({ tankList, deleteTankHandler }) => {
                     fontFamily: '"Roboto Condensed", sans-serif',
                     cursor: 'pointer',
                     outline: 'none',
-                }}>Add New Tank</button>
-            </Link>
+                }}>Analytics</button>
             </div>
-            <div>
-
-                <center><h2 sty>Country distribution</h2>
-                <MyPieChart pieChartData={pieChartData} sizing={pieSizing} />
-                </center>
             </div>
-                <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-                    <h2>Slowest Tank</h2>
-                    {/* <p>{findSlowestTank().name} is the slowest tank with a speed of {findSlowestTank().speed}</p> */}
+            {analyticsView &&  <div style={{display: "flex", width: "100%" }}>
+                <Box component="section" sx={{ p: 2, border: '1px solid #43423c', width: '50%' }}>
+                    <h2>Country distribution</h2>
+                    <div style={{display:"flex"}}>
+                        <MyPieChart pieChartData={pieChartData} sizing={pieSizing} />
+                        <div style={{
+                        width :'50%', 
+                        borderLeft: '1px solid #43423c',
+                    }}>
+                            {pieChartData.map((data) => {
+                                return <p>{data.label} : {data.value}</p>
+                            }) 
+                        }   
+                        </div>
+                    </div>   
                 </Box>
-
-        </div>
+                <Box component="section" sx={{ p: 2, border: '1px solid #43423c', width: '50%' }}>
+                    <h2>Slowest Tank</h2>
+                    { <p><b>{findSlowestTank().tankName}</b> is the slowest tank with a speed of <b>{findSlowestTank().tankSpeed} km/h </b></p> }
+                </Box>
+            </div>}      
+            </div>
     );
 }
 

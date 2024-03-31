@@ -103,6 +103,10 @@ const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
         setOpen(false);
     };
 
+
+
+        
+
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', background: '#1a1a1a', color: '#f2f2f2' }}>
             <TableContainer sx={{ maxHeight: 440 }}>

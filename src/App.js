@@ -46,7 +46,7 @@ function App() {
       
       setTanksData(data);
       setIsLoaded(true);
-    })
+    }).catch((error)=>{ console.log(error); })
   },[]);
 
 
@@ -85,20 +85,6 @@ function App() {
   };
 
 
-
-  //return another div if data is not loaded, make it look good
-   
-
-
-
-
-  if(!isLoaded){
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    )
-  }
 
   return (
     <div>

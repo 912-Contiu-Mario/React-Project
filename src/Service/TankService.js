@@ -9,7 +9,9 @@ class TankService {
             const response = await axios.get('http://localhost:8080/api/tanks');
             return response.data;
         } catch (error) {
-            throw error.response.data;
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
         }
     }
 
@@ -19,7 +21,9 @@ class TankService {
             return response.data;
             }
          catch (error) {
-            throw error.response.data;
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
         }
     }
 
@@ -29,7 +33,9 @@ class TankService {
             return response.data;
        }
          catch(error){
-              throw error.response.data;
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
     }
 }
 
@@ -37,9 +43,12 @@ class TankService {
         try{
              const response = await axios.put(`http://localhost:8080/api/tanks/${tank.id}`, tank);
              return response.data;
+
             }
         catch(error){
-            throw error.response.data;
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
         }
 }
 }
