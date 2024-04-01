@@ -51,6 +51,17 @@ class TankService {
             else throw error;
         }
 }
+    async getTankById(tankId){
+        try{
+            const response = await axios.get(`http://localhost:8080/api/tanks/${tankId}`);
+            return response.data;
+        }
+        catch(error){
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
+        }
+    }
 }
 export default new TankService()
 

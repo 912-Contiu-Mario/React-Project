@@ -92,7 +92,7 @@ function App() {
         <Routes>
           <Route path ='/' element={<Home />} />
           <Route path ='/tanks' element = {<Tanks tankList={tanksData} deleteTankHandler ={handleDeleteTank}/>} />
-          <Route path ='/tanks/:id' element={<TankDescription tankList = {tanksData} /> } />
+          <Route path ='/tanks/:id' element={<TankDescription  /> } />
           <Route path='/tanks/update/:id' element={<UpdateTank tankList={tanksData} updateTankHandler={handleUpdateTank} />}  />
           <Route path='/tanks/add' element={<AddTank tankList = {tanksData} handleAddTank={handleAddTank}/>} />
         </Routes>
