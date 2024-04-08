@@ -15,6 +15,18 @@ class TankService {
         }
     }
 
+    async checkServerHealth(){
+        try{
+            const response = await axios.get('http://localhost:8080/api/health');
+            return response.data;
+        }
+        catch(error){
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
+        }
+    }
+
     async addTank(tank){
         try {
             const response = await axios.post('http://localhost:8080/api/tanks', tank);

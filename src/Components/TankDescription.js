@@ -98,7 +98,7 @@ const TankDescription = () => {
                         Firepower 
                     </div>
                     <div style={{color:'#8c8c7c',}}>
-                        {clickedTank.tankFirepower}
+                        {clickedTank.tankFirepower + " HP/MIN"}
                     </div>
                     
                 </div>
@@ -107,7 +107,7 @@ const TankDescription = () => {
                         Speed 
                     </div>
                     <div style={{color:'#8c8c7c',}}>
-                        {clickedTank.tankSpeed}
+                        {clickedTank.tankSpeed + " km/h"}
                     </div>
                     
                 </div>

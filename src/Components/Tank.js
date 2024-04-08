@@ -31,7 +31,7 @@ const Tank = ({ id, tankName, tankCountry, tankType, tankYear, tankFirepower, ta
 
             </div>
         </div>
-        </Paper>
+        </Paper>    
        
     );
 }

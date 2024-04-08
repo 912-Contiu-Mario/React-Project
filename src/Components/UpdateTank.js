@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
+import { TankDataContext } from './TankDataContext';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@mui/material';
 
-const UpdateTank = ({ tankList, updateTankHandler }) => {
+const UpdateTank = ({updateTankHandler }) => {
 
+    const tankList = useContext(TankDataContext);
 
     const params = useParams();
     const navigate = useNavigate();
     const clickedTankId = params.id;
 
+
+    
     const tank = tankList.find(tank => tank.id == clickedTankId);
     
   
@@ -42,7 +46,7 @@ const UpdateTank = ({ tankList, updateTankHandler }) => {
                 errorMessage = 'Year should be a number';
 
             }
-            else if(e.target.value < 1930 || e.target.value > 1999){
+            else if(e.target.value < 1915 || e.target.value > 2025){
                 setYear(e.target.value);
                 isValid = false;
                 errorMessage = 'Only tanks between 1930-1999';
@@ -71,9 +75,7 @@ const UpdateTank = ({ tankList, updateTankHandler }) => {
             }
         }
         else if(field == 'speed'){
-            console.log(e.target.value)
             if(!/^\d+$/.test(e.target.value) && e.target.value != ''){
-                console.log(e.target.value)
                 isValid = false;
                 errorMessage = 'Speed should be a number';
 
@@ -168,9 +170,8 @@ const UpdateTank = ({ tankList, updateTankHandler }) => {
                                     <MenuItem value="Medium Tank">Medium Tank</MenuItem>
 
                                     <MenuItem value="Heavy Tank">Heavy Tank</MenuItem>
-                                    <MenuItem value="Tank Destroyer">Tank Destroyer</MenuItem>
+                                    <MenuItem value="Main Battle Tank">Main Battle Tank</MenuItem>
 
-                                    <MenuItem value="Self-propelled guns">Self propelled guns</MenuItem>
                                 </Select>
                         </FormControl>
                     </Grid>

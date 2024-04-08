@@ -9,7 +9,17 @@ import { useEffect, useState } from 'react';
 import AddTank from './Components/AddTank.js';
 import { v4 as uuid } from 'uuid'
 
+
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
+
+
+
+
+
 import TankService from './Service/TankService.js';
+import { TankDataContext } from './Components/TankDataContext.js';
 
 
 
@@ -32,33 +42,85 @@ const tanksDataList = [
   { id: uuid(), name: "T-34", country: "Russia", type: "Medium Tank", year: 1940, firepower: "1,200 HP/min", speed: "53 km/h" }
 ];
 
-tanksDataList.sort((tank1, tank2)=>(tank1.name > tank2.name) ? 1 : (tank1.name < tank2.name) ? -1 : 0);
 function App() {
 
   const [tanksData, setTanksData] = useState([]);
-  
+  const [serverStatus, setServerStatus] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
- const [isLoaded, setIsLoaded] = useState(false);
 
-//write function to fetch data from server
+
   useEffect(()=>{
-    TankService.getTanks().then((data)=>{
+    window.addEventListener('online', ()=> setIsOnline(true))
+    window.addEventListener('offline', ()=> setIsOnline(false) )
+
+    return ()=>{
+        window.removeEventListener('online', ()=> setIsOnline(true))
+        window.removeEventListener('offline', ()=> setIsOnline(false) )
+    }
+},[]);
+
+  useEffect(() => {
+
+
+
+    const checkServerHealth = () => {
+      TankService.checkServerHealth()
+        .then(() => setServerStatus(true))
+        .catch(() => setServerStatus(false));
+    };
+
+    checkServerHealth();
+
+    const intervalId = setInterval(checkServerHealth, 10000); // 10 seconds interval
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+
+
+  // useEffect(()=>{
+  //   TankService.getTanks().then((data)=>{
+  //     setTanksData(data);
+  //     setIsLoaded(true);
+  //   }).catch((error)=>{ console.log(error); })
+  // },[]);
+
+
+  useEffect(() => {
+    // Create a new SockJS instance
+    const socket = new SockJS('http://localhost:8080/tanks'); // Adjust the URL as needed
+
+    // Create a Stomp client over the SockJS connection
+    const stompClient = Stomp.over(socket);
+
+    // Connect to the WebSocket
+    stompClient.connect({}, () => {
+      stompClient.subscribe('/topic/tanks', (message) => {
+        
+        // Handle received data here
+        const tankData = JSON.parse(message.body);
+        setTanksData(tankData);
+        // Update your state or perform any other actions
+      });
+
       
-      setTanksData(data);
-      setIsLoaded(true);
-    }).catch((error)=>{ console.log(error); })
-  },[]);
+    });
+
+    // Clean up the connection when the component unmounts
+   
+  }, []);
 
 
-  //write a useEffect to sort the data by name every time its changed
-  useEffect(()=>{
-    tanksData.sort((tank1, tank2)=>(tank1.tankName > tank2.tankName) ? 1 : (tank1.tankName < tank2.tankName) ? -1 : 0);
-  },[tanksData]);
+  // useEffect(()=>{
+  //   tanksData.sort((tank1, tank2)=>(tank1.tankName > tank2.tankName) ? 1 : (tank1.tankName < tank2.tankName) ? -1 : 0);
+  // },[tanksData]);
+
+
 
   const handleAddTank = (tankToAdd) => {
-
     TankService.addTank(tankToAdd).then(()=>{
-
       TankService.getTanks().then((data)=>{
         setTanksData(data);
       }).catch((error)=>{ console.log(error); })  
@@ -85,20 +147,30 @@ function App() {
   };
 
 
+  if(!isOnline){
+    return <div style={{ color: 'white', background: '#1a1a1a', padding: 20, textAlign: 'center' }}>You are offline!</div>
+  }
 
-  return (
-    <div>
-      <Router>
-        <Routes>
-          <Route path ='/' element={<Home />} />
-          <Route path ='/tanks' element = {<Tanks tankList={tanksData} deleteTankHandler ={handleDeleteTank}/>} />
-          <Route path ='/tanks/:id' element={<TankDescription  /> } />
-          <Route path='/tanks/update/:id' element={<UpdateTank tankList={tanksData} updateTankHandler={handleUpdateTank} />}  />
-          <Route path='/tanks/add' element={<AddTank tankList = {tanksData} handleAddTank={handleAddTank}/>} />
-        </Routes>
-      </Router>
-    </div>
-  );
-}
+  else if (!serverStatus) {
+    return <div style={{ color: 'white', background: '#1a1a1a', padding: 20, textAlign: 'center' }}>Server is down!</div>
+  }
+
+  else
+    return (
+      <div>
+        <TankDataContext.Provider value={tanksData}>
+          <Router>
+            <Routes>
+              <Route path ='/' element={<Home />} />
+              <Route path ='/tanks' element = {<Tanks deleteTankHandler ={handleDeleteTank}/>} />
+              <Route path ='/tanks/:id' element={<TankDescription  /> } />
+              <Route path='/tanks/update/:id' element={<UpdateTank updateTankHandler={handleUpdateTank} />}  />
+              <Route path='/tanks/add' element={<AddTank handleAddTank={handleAddTank}/>} />
+            </Routes>
+          </Router>
+        </TankDataContext.Provider>
+      </div>
+    );
+  }
 
 export default App;

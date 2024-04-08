@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import TankList from "./TankList";
-import DeleteTank from "./DeleteTank";
 import { Link } from "react-router-dom";
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { Box } from "@mui/material";
+import { TankDataContext } from "./TankDataContext";
+
 
 import MyPieChart from "./MyPieChart";
 
@@ -13,21 +14,22 @@ const pieSizing = {
     height: 200,
     legend: { hidden: true },
   };
-const Tanks = ({ tankList, deleteTankHandler }) => {
+const Tanks = ({ deleteTankHandler }) => {
+    const tankList = useContext(TankDataContext);
+
 
     const [pieChartData, setPiechartData] = useState([]);
 
     const [analyticsView, setAnalyticsView] = useState(false);
     
     const displayChartDataHandler =(data)=>{
-        console.log(data);
         setPiechartData(data);
     };
 
     const findSlowestTank = () => {
         let slowestTank = tankList[0];
         tankList.forEach((tank) => {
-            if (tank.speed < slowestTank.speed) {
+            if (tank.tankSpeed < slowestTank.tankSpeed) {
                 slowestTank = tank;
             }
         });

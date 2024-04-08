@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Table, TableHead, TableCell, TableRow, TableContainer, Paper, TableBody, TablePagination } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Table, TableHead, TableCell, TableRow, TableContainer, Paper, TableBody, TablePagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import React, { useEffect, useState, useContext } from 'react';
+import { TankDataContext } from './TankDataContext';
 import Button from '@mui/material/Button';
 
 
@@ -24,7 +24,9 @@ const randColor = () =>  {
 }
 
 let clickedTank = 0;
-const TankList = ({ tankList, deleteTankHandler, displayChartDataHandler }) => {
+const TankList = ({deleteTankHandler, displayChartDataHandler }) => {
+
+    const tankList = useContext(TankDataContext);
     
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);

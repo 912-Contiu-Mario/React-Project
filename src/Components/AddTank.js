@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { v4 as uuid } from 'uuid'
-import { on } from 'events';
+import { useNavigate,Link  } from 'react-router-dom';
+
 
 
 const AddTank = ({handleAddTank }) => {
@@ -56,7 +54,7 @@ const AddTank = ({handleAddTank }) => {
                 errorMessage = 'Year should be a number';
 
             }
-            else if(e.target.value < 1930 || e.target.value > 1999){
+            else if(e.target.value < 1930 || e.target.value > 2025){
                 setYear(e.target.value);
                 isValid = false;
                 errorMessage = 'Only tanks between 1930-1999';
@@ -175,9 +173,8 @@ const AddTank = ({handleAddTank }) => {
                                     <MenuItem value="Medium Tank">Medium Tank</MenuItem>
 
                                     <MenuItem value="Heavy Tank">Heavy Tank</MenuItem>
-                                    <MenuItem value="Tank Destroyer">Tank Destroyer</MenuItem>
+                                    <MenuItem value="Main Battle Tank">Tank Destroyer</MenuItem>
 
-                                    <MenuItem value="Self-propelled guns">Self propelled guns</MenuItem>
                                 </Select>
                         </FormControl>
                     </Grid>
