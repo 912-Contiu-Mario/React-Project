@@ -354,6 +354,8 @@ export const AppProvider = ({ children }) => {
         const handleAuthentication = () => {
             if (accessToken) {
                 const { exp } = jwtDecode(accessToken);
+                const { role } = jwtDecode(accessToken);
+                console.log(role);
                 console.log(exp);
                 const expirationTime = exp * 1000;
                 const currentTime = Date.now();

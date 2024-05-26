@@ -65,7 +65,7 @@ const TankList = ({ displayChartDataHandler }) => {
     // }, []);
 
 
-    
+
 
     // const handleScroll = data => {
     //     const {scrollTop} = data;
@@ -113,11 +113,11 @@ const TankList = ({ displayChartDataHandler }) => {
         <Paper sx={{ width: '100%', overflow: 'hidden', background: '#1a1a1a', color: '#f2f2f2' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
 
-                <Table 
+                <Table
                     stickyHeader
-                    // onScroll={handleScroll}
-                
-                    >
+                // onScroll={handleScroll}
+
+                >
                     <TableHead sx={{
                         height: "50px",
                     }}>
@@ -214,8 +214,11 @@ const TankList = ({ displayChartDataHandler }) => {
                                         borderBottom: '1px solid #43423c',
                                     }}
                                     align="center">
-                                    {currentUserId == row.userId && <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>}
-                                    {currentUserId == row.userId && <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>}
+
+                                    <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>
+                                    <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>
+                                    {/* {currentUserId == row.userId && <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>}
+                                    {currentUserId == row.userId && <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>} */}
                                 </TableCell>
                             </TableRow>
                         ))}
