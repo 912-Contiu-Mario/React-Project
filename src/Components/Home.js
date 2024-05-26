@@ -6,7 +6,7 @@ const Home = () => {
     return (
         <Paper style={{ maxWidth: 1200, margin: 'auto', marginTop: 20, background: '#1a1a1a', color: 'white', padding: 20 }}>
             <header>
-                <center><h2 style={{ borderBottom: '1px solid #555', paddingBottom: 10 }}>Tanks wiki</h2></center>
+               z <center><h2 style={{ borderBottom: '1px solid #555', paddingBottom: 10 }}>Tanks wiki</h2></center>
             </header>
             <main style={{ textAlign: 'center', paddingTop: 20 }}>
                 <Link to='/tanks' style={{ textDecoration: 'none' }}>

@@ -15,7 +15,21 @@ class TankService {
         }
     }
 
+
+    async getTankIdByName(tankName){
+        try{
+            const response = await axios.get('http://localhost:8080/api/tanks/findIdByName?tankName='+tankName);
+            return response.data;
+        }
+        catch(error){
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
+        }
+    }
+
     async checkServerHealth(){
+
         try{
             const response = await axios.get('http://localhost:8080/api/health');
             return response.data;
@@ -74,6 +88,20 @@ class TankService {
             else throw error;
         }
     }
+
+
+    async addTanks(tanks){
+        try {
+            const response = await axios.post('http://localhost:8080/api/tanks/bulk', tanks);
+            return response.data;
+        } catch (error) {
+            if(error.response != undefined )
+                throw error.response.data;
+            else throw error;
+        }
+    }
+
+    
 }
 export default new TankService()
 

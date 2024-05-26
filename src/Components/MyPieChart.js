@@ -1,24 +1,24 @@
 import React from 'react';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 
-const MyPieChart = ({pieChartData, sizing}) => {
+const MyPieChart = ({ pieChartData, sizing }) => {
 
-    return(
-    <PieChart
-                series={[
-                    {
-                        outerRadius: 80,
-                        data: pieChartData,
-                        },
-                    ]}
-                sx={{
-                    [`& .${pieArcLabelClasses.root}`]: {
+    return (
+        <PieChart
+            series={[
+                {
+                    outerRadius: 80,
+                    data: pieChartData,
+                },
+            ]}
+            sx={{
+                [`& .${pieArcLabelClasses.root}`]: {
                     fill: 'white',
                     fontSize: 14,
-                    },
-                }}
-                {...sizing}
-                />
+                },
+            }}
+            {...sizing}
+        />
 
     )
 
