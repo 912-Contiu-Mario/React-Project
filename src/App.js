@@ -23,6 +23,9 @@ import { AppContext } from './Components/AppContext.js';
 import AuthGuard from './Components/AuthGuard.js';
 import Register from './Components/Register.js';
 import Login from './Components/Login.js';
+import Users from './Components/Users.js';
+import AddUser from './Components/AddUser.js';
+import UpdateUser from './Components/UpdateUser.js';
 
 
 
@@ -193,6 +196,9 @@ function App() {
                     <Route path='/tanks/:id/suspensionModules/addModule' element={<AuthGuard><AddModule moduleType='suspension' /></AuthGuard>} />
                     <Route path='/tanks/:id/suspensionModules/updateModule/:moduleId' element={<AuthGuard><UpdateModule moduleType='suspension' /></AuthGuard>} />
 
+                    <Route path='/users' element={<AuthGuard><Users/></AuthGuard>} />
+                    <Route path='/users/add' element={<AuthGuard><AddUser/></AuthGuard>} />
+                    <Route path='/users/update/:id' element={<AuthGuard><UpdateUser/></AuthGuard>} />
                   </Routes>
                 </Router>
       </div>

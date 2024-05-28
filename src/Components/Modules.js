@@ -19,7 +19,7 @@ const Modules = ({ moduleType }) => {
 
     const {modulesData, setModulesData} = useContext(AppContext);
     const fetchModulesByTankIdAndModuleType = useContext(AppContext).fetchModulesByTankIdAndModuleType;
-    const currentUserId = useContext(AppContext).currentUserId;
+    const currentUser= useContext(AppContext).currentUser;
     const [tank, setTank] = useState(null);
     
 
@@ -67,7 +67,7 @@ const Modules = ({ moduleType }) => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <Link to="addModule" style={{ textDecoration: 'none' }}>
-                    {currentUserId == tank.userId &&
+                    {currentUser.role !== 'USER' &&
                         <button style={{
                             margin: '20px',
                             padding: '10px 20px',

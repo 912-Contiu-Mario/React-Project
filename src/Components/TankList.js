@@ -25,7 +25,7 @@ const TankList = ({ displayChartDataHandler }) => {
 
     const tankList = useContext(AppContext).tanksData
     const deleteTankHandler = useContext(AppContext).handleDeleteTank;
-    const currentUserId = useContext(AppContext).currentUserId;
+    const currentUser= useContext(AppContext).currentUser;
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
 
@@ -215,10 +215,8 @@ const TankList = ({ displayChartDataHandler }) => {
                                     }}
                                     align="center">
 
-                                    <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>
-                                    <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>
-                                    {/* {currentUserId == row.userId && <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>}
-                                    {currentUserId == row.userId && <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>} */}
+                                    {currentUser.role !== "USER" && <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(row.id, event)}>Update</Button>}
+                                    {currentUser.role !== "USER"  && <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(row, event)}>Delete</Button>}
                                 </TableCell>
                             </TableRow>
                         ))}

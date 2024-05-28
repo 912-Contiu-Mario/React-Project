@@ -13,13 +13,14 @@ const ModuleList = () => {
   const [open, setOpen] = useState(false);
   const deleteModuleHandler = useContext(AppContext).handleDeleteModule;
   const {modulesData, setModulesData} = useContext(AppContext);
+  const currentUser = useContext(AppContext).currentUser;
 
-  console.log(modulesData);
-
+  
 
   const handleUpdateClick = (id) => {
     const currentPath = location.pathname;
     const updatedPath = `${currentPath}/updateModule/${id}`;
+    
     navigate(updatedPath);
   }
 
@@ -36,7 +37,6 @@ const ModuleList = () => {
   const handleDelete = () => {
 
     const currentPath = location.pathname;
-
     // Delete the tank
     deleteModuleHandler(clickedModule);
     // navigate(currentPath);
@@ -44,7 +44,6 @@ const ModuleList = () => {
     setOpen(false);
   };
 
-  console.log(modulesData)
 
   const propertyNames = modulesData.length > 0 ? Object.keys(modulesData[0]) : [];
   if (modulesData.length === 0) {
@@ -142,8 +141,8 @@ const ModuleList = () => {
                     }}
                     align="center"
                   >
-                    <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(component.id, event)}>Update</Button>
-                    <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(component, event)}>Delete</Button>
+                    {currentUser.role !== 'USER' && <Button data-testid="deleteButton" onClick={(event) => handleClickOpen(component, event)}>Delete</Button>}
+                    {currentUser.role !== 'USER' && <Button data-testid="updateButton" onClick={(event) => handleUpdateClick(component.id, event)}>Update</Button>}
                   </TableCell>
                 </TableRow>
               ))}

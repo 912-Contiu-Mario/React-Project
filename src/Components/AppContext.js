@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import TankService from "../Service/TankService";
 import ModuleService from "../Service/ModuleService";
 import AuthService from "../Service/AuthService";
+import UserService from "../Service/UserService";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { useEffect } from "react";
@@ -18,15 +19,20 @@ export const AppProvider = ({ children }) => {
     const [isOnline, setIsOnline] = useState(true);
     const [tanksData, setTanksData] = useState([]);
     const [modulesData, setModulesData] = useState([]);
+    const [users, setUsers] = useState([]);
     const [accessToken, setAccessToken] = useState(
         localStorage.getItem("accessToken") || null
     );
+
+
+
     const [isAuthenticated, setIsAuthenticated] = useState(
         localStorage.getItem("isAuthenticated") === "true" || false
     );
-    const [currentUserId, setCurrentUserId] = useState(
-        localStorage.getItem("currentUserId") || null
-    );
+    const [currentUser, setCurrentUser] = useState(() => {
+        const storedUser = localStorage.getItem("currentUser");
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
 
 
     useEffect(() => {
@@ -45,7 +51,7 @@ export const AppProvider = ({ children }) => {
             TankService.checkServerHealth()
                 .then(() => setServerStatus(true))
                 .catch(() => setServerStatus(false));
-                
+
         };
         checkServerHealth();
         setInterval(checkServerHealth, 10000); // 10 seconds interval
@@ -163,8 +169,12 @@ export const AppProvider = ({ children }) => {
     }, []);
 
 
+
+    
+
+
     const handleAddTank = (tankToAdd) => {
-        tankToAdd.userId = currentUserId;
+        // tankToAdd.userId = currentUser;
         if (!isOnline || !serverStatus) {
             console.log("Adding tank locally")
             tankToAdd.id = tanksData.length + 1;
@@ -211,7 +221,7 @@ export const AppProvider = ({ children }) => {
     };
 
     const handleUpdateTank = (updatedTank) => {
-        updatedTank.userId = currentUserId;
+        // updatedTank.userId = currentUserId;
         if (!isOnline || !serverStatus) {
             const action = {
                 action: 'update',
@@ -246,7 +256,7 @@ export const AppProvider = ({ children }) => {
             const actions = JSON.parse(localStorage.getItem('actions'));
             localStorage.setItem('actions', JSON.stringify([...actions, action]));
             setModulesData([...modulesData, module]);
-           
+
         }
         else {
 
@@ -330,7 +340,7 @@ export const AppProvider = ({ children }) => {
     const fetchModulesByTankIdAndModuleType = (tankId, moduleType) => {
 
 
-        if(!serverStatus || !isOnline){
+        if (!serverStatus || !isOnline) {
             return;
         }
         ModuleService.getTankModulesByModuleType(tankId, moduleType).then((modules) => {
@@ -342,7 +352,7 @@ export const AppProvider = ({ children }) => {
 
 
     const getTankById = (tankId) => {
-        if(!serverStatus || !isOnline){
+        if (!serverStatus || !isOnline) {
             return tanksData.find((tank) => tank.id === tankId);
         }
         return TankService.getTankById(tankId);
@@ -354,9 +364,7 @@ export const AppProvider = ({ children }) => {
         const handleAuthentication = () => {
             if (accessToken) {
                 const { exp } = jwtDecode(accessToken);
-                const { role } = jwtDecode(accessToken);
-                console.log(role);
-                console.log(exp);
+
                 const expirationTime = exp * 1000;
                 const currentTime = Date.now();
 
@@ -364,7 +372,6 @@ export const AppProvider = ({ children }) => {
                     setIsAuthenticated(true);
                     localStorage.setItem("isAuthenticated", true);
                     const timeUntilExpiration = expirationTime - currentTime;
-                    console.log(timeUntilExpiration);
                     const refreshTimeout = setTimeout(() => {
                         console.log("Aceess token has expired, refreshing...");
                         setIsAuthenticated(false);
@@ -419,11 +426,13 @@ export const AppProvider = ({ children }) => {
         AuthService.login(user)
             .then((response) => {
                 setAccessToken(response.token);
+                const { role } = jwtDecode(response.token);
                 localStorage.setItem("accessToken", response.token);
                 // setIsAuthenticated(true);
                 // localStorage.setItem("isAuthenticated", true)
-                setCurrentUserId(response.id);
-                localStorage.setItem("currentUserId", response.id);
+                const currentUser = { id: response.id, email: response.email, username: response.username, role: role };
+                setCurrentUser(currentUser);
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
             })
             .catch((error) => {
@@ -437,12 +446,56 @@ export const AppProvider = ({ children }) => {
         setIsAuthenticated(false);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("isAuthenticated");
-        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("currentUser");
         delete axios.defaults.headers.common.Authorization;
     };
 
+    const handleDeleteUser = (id) => {
+        UserService.deleteUser(id).then(() => {
+            UserService.getUsers().then((users) => {
+                const filteredUsers = users.filter(user => user.role !== 'ADMIN');
+                setUsers(filteredUsers);
+            }).catch((error) => {
+                console.error('Error fetching users:', error);
+            });
+        });
+           
+    };
+
+    const handleAddUser = (user) => {
+        UserService.addUser(user).then(()=>{
+            UserService.getUsers().then((users) => {
+                const filteredUsers = users.filter(user => user.role !== 'ADMIN');
+                setUsers(filteredUsers);
+            }).catch((error) => {
+                console.error('Error fetching users:', error);
+            });
+        })
+    }
+
+    const loadUsers = () => {
+        UserService.getUsers().then((users) => {
+            const filteredUsers = users.filter(user => user.role !== 'ADMIN');
+            setUsers(filteredUsers);
+        }).catch((error) => {
+            console.error('Error fetching users:', error);
+        });
+    }
+
+
+    const handleUpdateUser = (user) => {
+        UserService.updateUser(user).then(() => {
+            UserService.getUsers().then((users) => {
+                const filteredUsers = users.filter(user => user.role !== 'ADMIN');
+                setUsers(filteredUsers);
+            }).catch((error) => {
+                console.error('Error fetching users:', error);
+            });
+        });
+    }
+
     return (
-        <AppContext.Provider value={{ getTankById, tanksData, serverStatus, isOnline, handleAddTank, handleDeleteTank, handleUpdateTank, handleAddModule, handleUpdateModule, handleDeleteModule, fetchModulesByTankIdAndModuleType, modulesData, setModulesData, accessToken, isAuthenticated, handleLoginUser, handleRegisterUser, handleLogoutUser, currentUserId }}>
+        <AppContext.Provider value={{ getTankById, tanksData, serverStatus, isOnline, handleAddTank, handleDeleteTank, handleUpdateTank, handleAddModule, handleUpdateModule, handleDeleteModule, fetchModulesByTankIdAndModuleType, modulesData, setModulesData, accessToken, isAuthenticated, handleLoginUser, handleRegisterUser, handleLogoutUser, currentUser, handleAddUser, handleDeleteUser, handleUpdateUser,  users, loadUsers }}>
             {children}
         </AppContext.Provider>)
 
