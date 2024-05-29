@@ -23,7 +23,7 @@ class ModuleService {
 
     async addModules(modules) {
         try {
-            const response = await axios.post('http://localhost:8080/api/modules/bulk', modules)
+            const response = await axios.post('/api/modules/bulk', modules)
             return response.data;
         } catch (error) {
             if(error.response != undefined )
@@ -35,7 +35,7 @@ class ModuleService {
 
     async getTankModules(tankId){
         try {
-            const response = await axios.get(`http://localhost:8080/api/modules/${tankId}`);
+            const response = await axios.get(`/api/modules/${tankId}`);
             return response.data;
         } catch (error) {
             if(error.response != undefined )
@@ -46,7 +46,7 @@ class ModuleService {
 
     async getTankModulesByModuleType(tankId, moduleType){
         try {
-            const response = await axios.get(`http://localhost:8080/api/modules/${tankId}?moduleType=${moduleType}`);
+            const response = await axios.get(`/api/modules/${tankId}?moduleType=${moduleType}`);
             return response.data;
         } catch (error) {
             if(error.response != undefined )
@@ -57,7 +57,7 @@ class ModuleService {
 
     async addModule(module){
         try {
-            const response = await axios.post('http://localhost:8080/api/modules', module);
+            const response = await axios.post('/api/modules', module);
     
             return response.data;
             }
@@ -71,7 +71,7 @@ class ModuleService {
 
     async deleteModule(moduleId){
         try {
-            const response = await axios.delete(`http://localhost:8080/api/modules/${moduleId}`);
+            const response = await axios.delete(`/api/modules/${moduleId}`);
             return response.data;
             }
          catch (error) {
@@ -83,7 +83,7 @@ class ModuleService {
 
     async updateModule(module){
         try {
-            const response = await axios.put(`http://localhost:8080/api/modules/${module.id}`, module);
+            const response = await axios.put(`/api/modules/${module.id}`, module);
             return response.data;
             }
          catch (error) {

@@ -10,7 +10,7 @@ const Home = () => {
             </header>
             <main style={{ textAlign: 'center', paddingTop: 20 }}>
                 <Link to='/tanks' style={{ textDecoration: 'none' }}>
-                    <Button data-testid="continueButton" variant="contained" color="primary">
+                    <Button id="continueButton" variant="contained" color="primary">
                         Click here to see Tanks
                     </Button>
                 </Link>

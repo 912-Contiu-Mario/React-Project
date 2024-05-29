@@ -14,6 +14,8 @@ export const AppContext = createContext(null);
 
 
 export const AppProvider = ({ children }) => {
+    axios.defaults.baseURL = 'http://13.60.35.36:8080';
+
 
     const [serverStatus, setServerStatus] = useState(false);
     const [isOnline, setIsOnline] = useState(true);
@@ -157,7 +159,7 @@ export const AppProvider = ({ children }) => {
 
 
     // useEffect(() => {
-    //     const socket = new SockJS('http://localhost:8080/tanks'); // Adjust the URL as needed
+    //     const socket = new SockJS('/tanks'); // Adjust the URL as needed
 
     //     const stompClient = Stomp.over(socket);
     //     stompClient.connect({}, () => {

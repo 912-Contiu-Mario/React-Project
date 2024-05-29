@@ -67,6 +67,7 @@ const Modules = ({ moduleType }) => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <Link to="addModule" style={{ textDecoration: 'none' }}>
+                        {console.log(currentUser.role)}
                     {currentUser.role !== 'USER' &&
                         <button style={{
                             margin: '20px',

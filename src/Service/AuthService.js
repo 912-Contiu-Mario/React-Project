@@ -3,7 +3,7 @@ import axios from 'axios';
 class AuthService {
     async login(credentials) {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', credentials);
+            const response = await axios.post('/api/auth/login', credentials);
             return response.data;
         } catch (error) {
             if(error.response != undefined )
@@ -14,7 +14,7 @@ class AuthService {
 
     async register(user) {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/register', user);
+            const response = await axios.post('/api/auth/register', user);
             return response.data;
         } catch (error) {
             if(error.response != undefined )

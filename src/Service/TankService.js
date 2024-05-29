@@ -6,7 +6,7 @@ class TankService {
     }
     async getTanks(){
         try {
-            const response = await axios.get('http://localhost:8080/api/tanks');
+            const response = await axios.get('/api/tanks');
             return response.data;
         } catch (error) {
             if(error.response != undefined )
@@ -18,7 +18,7 @@ class TankService {
 
     async getTankIdByName(tankName){
         try{
-            const response = await axios.get('http://localhost:8080/api/tanks/findIdByName?tankName='+tankName);
+            const response = await axios.get('/api/tanks/findIdByName?tankName='+tankName);
             return response.data;
         }
         catch(error){
@@ -31,7 +31,7 @@ class TankService {
     async checkServerHealth(){
 
         try{
-            const response = await axios.get('http://localhost:8080/api/health');
+            const response = await axios.get('/api/health');
             return response.data;
         }
         catch(error){
@@ -43,7 +43,7 @@ class TankService {
 
     async addTank(tank){
         try {
-            const response = await axios.post('http://localhost:8080/api/tanks', tank);
+            const response = await axios.post('/api/tanks', tank);
             return response.data;
             }
          catch (error) {
@@ -55,7 +55,7 @@ class TankService {
 
     async deleteTank(tankId){
        try{
-            const response = await axios.delete(`http://localhost:8080/api/tanks/${tankId}`);
+            const response = await axios.delete(`/api/tanks/${tankId}`);
             return response.data;
        }
          catch(error){
@@ -67,7 +67,7 @@ class TankService {
 
     async updateTank(tank){
         try{
-             const response = await axios.put(`http://localhost:8080/api/tanks/${tank.id}`, tank);
+             const response = await axios.put(`/api/tanks/${tank.id}`, tank);
              return response.data;
 
             }
@@ -79,7 +79,7 @@ class TankService {
 }
     async getTankById(tankId){
         try{
-            const response = await axios.get(`http://localhost:8080/api/tanks/${tankId}`);
+            const response = await axios.get(`/api/tanks/${tankId}`);
             return response.data;
         }
         catch(error){
@@ -92,7 +92,7 @@ class TankService {
 
     async addTanks(tanks){
         try {
-            const response = await axios.post('http://localhost:8080/api/tanks/bulk', tanks);
+            const response = await axios.post('/api/tanks/bulk', tanks);
             return response.data;
         } catch (error) {
             if(error.response != undefined )

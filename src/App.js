@@ -86,7 +86,7 @@ function App() {
 
   // useEffect(() => {
   //   // Create a new SockJS instance
-  //   const socket = new SockJS('http://localhost:8080/tanks'); // Adjust the URL as needed
+  //   const socket = new SockJS('/tanks'); // Adjust the URL as needed
 
   //   // Create a Stomp client over the SockJS connection
   //   const stompClient = Stomp.over(socket);
