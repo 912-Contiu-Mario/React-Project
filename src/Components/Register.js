@@ -25,19 +25,16 @@ const Register = () => {
         event.preventDefault();
         const hasError = Object.values(fields).some(field => field.error);
         if (!hasError) {
-            try{
-                handleRegisterUser({ email: email, username: username, password: password })
-                navigate('/login');
-            }
-            catch (error) {
-                setError(true);
-                console.error('Registration failed:', error);
-            }
+          
+                handleRegisterUser({ email: email, username: username, password: password }).then(()=>{
+                    navigate('/login');
+                }).catch((error)=>{
+                    setError(true);
+                })
         }
         else {
             console.log('Error in form');
         }
-
     }
 
 
@@ -146,6 +143,7 @@ const Register = () => {
                             label="Password"
                             value={password}
                             error={fields.password.error}
+                            type="password"
                             helperText={fields.password.errorMessage}
                             onChange={(e) => handleChange('password', e)
                             }

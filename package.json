@@ -56,6 +56,7 @@
     "@types/node": "^20.11.30",
     "@types/sockjs-client": "^1.5.4",
     "@types/stompjs": "^2.3.9",
-    "@types/uuid": "^9.0.8"
+    "@types/uuid": "^9.0.8",
+    "cypress": "^13.10.0"
   }
 }

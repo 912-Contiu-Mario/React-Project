@@ -21,9 +21,8 @@ const randColor = () => {
 }
 
 let clickedTank = 0;
-const TankList = ({ displayChartDataHandler }) => {
+const TankList = ({ tankList, displayChartDataHandler }) => {
 
-    const tankList = useContext(AppContext).tanksData
     const deleteTankHandler = useContext(AppContext).handleDeleteTank;
     const currentUser= useContext(AppContext).currentUser;
     const [rowsPerPage, setRowsPerPage] = useState(5);

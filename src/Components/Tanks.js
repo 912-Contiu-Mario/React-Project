@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import TankList from "./TankList";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -18,10 +18,16 @@ const Tanks = () => {
     const tankList = useContext(AppContext).tanksData;
     const [pieChartData, setPiechartData] = useState([]);
     const [analyticsView, setAnalyticsView] = useState(false);
+    const fetchTankData = useContext(AppContext).fetchTankData;
 
+    useEffect(() => {
+        fetchTankData();
+        
+    }, []);
 
     const displayChartDataHandler = (data) => {
         setPiechartData(data);
+
     };
 
 

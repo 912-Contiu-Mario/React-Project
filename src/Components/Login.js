@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, TextField } from "@mui/material";
+import { Button, Grid, Paper, TextField, cardContentClasses } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AppContext } from "./AppContext";
@@ -18,16 +18,17 @@ const Login = () => {
     const isAuthenticated = useContext(AppContext).isAuthenticated;
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            await handleLoginUser({ email: Email, password: Password });
-        } catch (error) {
-            setError(true);
-            console.error('Login failed:', error);
-        }
-    };
 
-    useEffect(()=>{
-        if(isAuthenticated){
+        handleLoginUser({ email: Email, password: Password }).catch((error) => {
+            setError(true);
+        })
+
+
+
+    }
+
+    useEffect(() => {
+        if (isAuthenticated) {
             navigate('/tanks');
         }
     }, [isAuthenticated]);
@@ -40,11 +41,13 @@ const Login = () => {
                 <Grid container alignItems="flex-start" spacing={2}>
                     <Grid item xs={12}>
                         <TextField
+                            id="emailTextField"
                             fullWidth
                             label="Email"
                             value={Email}
-                            onChange={(e) =>setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                             variant="filled"
+                            type="text"
                             InputLabelProps={{
                                 style: { color: '#ddd' },
                             }}
@@ -61,6 +64,7 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)
                             }
                             variant="filled"
+                            type="password"
                             InputLabelProps={{
                                 style: { color: '#ddd' },
                             }}

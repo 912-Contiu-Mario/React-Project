@@ -17,11 +17,12 @@ export const AppProvider = ({ children }) => {
 
     const [serverStatus, setServerStatus] = useState(false);
     const [isOnline, setIsOnline] = useState(true);
-    const [tanksData, setTanksData] = useState([]);
+    const [tanksData, setTanksData] = useState(undefined);
     const [modulesData, setModulesData] = useState([]);
     const [users, setUsers] = useState([]);
     const [accessToken, setAccessToken] = useState(
         localStorage.getItem("accessToken") || null
+
     );
 
 
@@ -155,22 +156,33 @@ export const AppProvider = ({ children }) => {
 
 
 
-    useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/tanks'); // Adjust the URL as needed
+    // useEffect(() => {
+    //     const socket = new SockJS('http://localhost:8080/tanks'); // Adjust the URL as needed
 
-        const stompClient = Stomp.over(socket);
-        stompClient.connect({}, () => {
-            stompClient.subscribe('/topic/tanks', (message) => {
+    //     const stompClient = Stomp.over(socket);
+    //     stompClient.connect({}, () => {
+    //         stompClient.subscribe('/topic/tanks', (message) => {
 
-                const tankData = JSON.parse(message.body);
-                setTanksData(tankData);
-            });
-        });
-    }, []);
-
-
+    //             const tankData = JSON.parse(message.body);
+    //             setTanksData(tankData);
+    //         });
+    //     });
+    // }, []);
 
     
+
+    
+
+
+
+    const fetchTankData = () =>{
+        TankService.getTanks().then((data) => {
+            setTanksData(data);
+        }
+        ).catch((error) => {
+            console.log(error);
+        });
+    }
 
 
     const handleAddTank = (tankToAdd) => {
@@ -410,20 +422,17 @@ export const AppProvider = ({ children }) => {
     }, [isAuthenticated, accessToken]);
 
     const handleRegisterUser = (user) => {
-        AuthService.register(user)
+        return AuthService.register(user)
             .then(() => {
                 // setAccessToken(response.token);
                 // localStorage.setItem("accessToken", response.token);
                 // setIsAuthenticated(true);
                 // localStorage.setItem("isAuthenticated", true);
-            })
-            .catch((error) => {
-                console.log(error);
             });
     };
 
     const handleLoginUser = (user) => {
-        AuthService.login(user)
+        return AuthService.login(user)
             .then((response) => {
                 setAccessToken(response.token);
                 const { role } = jwtDecode(response.token);
@@ -434,11 +443,7 @@ export const AppProvider = ({ children }) => {
                 setCurrentUser(currentUser);
                 localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
-            })
-            .catch((error) => {
-                console.log(error);
             });
-
     };
 
     const handleLogoutUser = () => {
@@ -495,7 +500,7 @@ export const AppProvider = ({ children }) => {
     }
 
     return (
-        <AppContext.Provider value={{ getTankById, tanksData, serverStatus, isOnline, handleAddTank, handleDeleteTank, handleUpdateTank, handleAddModule, handleUpdateModule, handleDeleteModule, fetchModulesByTankIdAndModuleType, modulesData, setModulesData, accessToken, isAuthenticated, handleLoginUser, handleRegisterUser, handleLogoutUser, currentUser, handleAddUser, handleDeleteUser, handleUpdateUser,  users, loadUsers }}>
+        <AppContext.Provider value={{ getTankById, tanksData,fetchTankData, serverStatus, isOnline, handleAddTank, handleDeleteTank, handleUpdateTank, handleAddModule, handleUpdateModule, handleDeleteModule, fetchModulesByTankIdAndModuleType, modulesData, setModulesData, accessToken, isAuthenticated, handleLoginUser, handleRegisterUser, handleLogoutUser, currentUser, handleAddUser, handleDeleteUser, handleUpdateUser,  users, loadUsers }}>
             {children}
         </AppContext.Provider>)
 
