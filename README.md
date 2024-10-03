@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# TanksWiki
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+TanksWiki is web application built for managing data on military tanks and their associated modules. The application allows users to securely log in and perform CRUD (Create, Read, Update, Delete) operations on tanks and modules, with real-time updates powered by WebSockets. The frontend is built using **React**, while the backend is developed with **Spring Boot**. **Spring Security** and **JWT** (JSON Web Token) are used for secure authentication and authorization.
+<br><br>**Link to TanksWiki-frontend:** https://github.com/912-Contiu-Mario/TanksWiki-backend
+---
 
-## Available Scripts
+## Project Overview
 
-In the project directory, you can run:
+### Main Features:
+- **Secure User Authentication**: Uses **JWT tokens** and **Spring Security** to protect the application. Users are required to log in to access and modify data.
+- **CRUD Operations**: The application allows users to create, view, update, and delete both tanks and modules dynamically. Data integrity and security are maintained through server-side validation.
+- **Real-time Updates**: Changes made in the system (like adding or updating tanks/modules) are pushed to the frontend in real-time using **WebSockets**.
+- **Frontend Guarding**: React’s route guards ensure that only authenticated users can access certain pages. Unauthorized users are automatically redirected to the login page.
+- **Global State Management**: React's **Context API** is used to manage the global state of the application, ensuring consistent access to authentication data and other stateful information across the app.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technology Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend:
+- **React**: Provides a dynamic, component-based user interface for the application.
+- **React Router**: Handles navigation and page routing.
+- **Context API**: Manages global application state (e.g., user authentication).
+- **JWT (JSON Web Token)**: The token is stored in **local storage** and used for subsequent API requests.
+- **WebSockets**: Allows the application to receive updates in real-time when new data is added or modified.
 
-### `npm test`
+### Backend:
+- **Spring Boot**: Powers the RESTful API that manages the tank and module data.
+- **Spring Security**: Protects routes and handles JWT-based authentication and authorization.
+- **JWT (JSON Web Token)**: Tokens are generated and validated on every API call to ensure user authentication.
+- **WebSockets**: Provides real-time communication between the backend and frontend for updates.
+- **JUnit and Mockito**: Used for unit testing and mocking dependencies in unit tests.
+- **Maven**: Build automation tool for managing dependencies and packaging the application.
+- **Database**: SQLServer DB stores tank and module data.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Security
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The project uses **Spring Security** to implement robust authentication and authorization. **JWT** tokens are generated upon successful login and are stored in the client’s local storage. These tokens are included in the `Authorization: Bearer <JWT_TOKEN>` header for subsequent requests to protected routes.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Key Security Features:
+- **Login Endpoint**: Handles user authentication and returns a JWT token.
+- **Token Validation**: JWT tokens are validated on every API request to ensure the user’s identity.
+- **Route Guards (Frontend)**: React guards ensure only authenticated users can access certain routes/pages.
+- **Protected Routes (Backend)**: The backend API restricts access to specific endpoints based on the user’s authentication status.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Real-time Functionality
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+TanksWiki uses **WebSockets** to push updates to the frontend as they happen. For instance, if a new tank or module is added, or an existing one is updated, the frontend will receive the updated data in real-time without the need for manual refreshing.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This is particularly useful in scenarios where multiple users are interacting with the system, ensuring that everyone has the most up-to-date information at any given time.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Testing
 
-## Learn More
+The backend of the application is thoroughly tested to ensure robustness and reliability. **JUnit** and **Mockito** are used to write unit tests for service layers, particularly focusing on mocking repository interactions.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Here’s an example of a test for the `ModuleService` class:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```java
+public class ModuleServiceTest {
 
-### Code Splitting
+    @Mock
+    ModuleRepository moduleRepository;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    @InjectMocks
+    ModuleService moduleService;
 
-### Analyzing the Bundle Size
+    @Test
+    public void testAddModule() throws RepositoryException {
+        Module newModule = new Module(1L, 60L, "Gun variation 1", "gun", 55, 30, 20, 155);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+        when(moduleRepository.save(any(Module.class))).thenReturn(newModule);
+        assert(moduleService.addModule(newModule) == 1L);
+    }
+}
